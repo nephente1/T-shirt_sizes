@@ -79,6 +79,7 @@ class ListState {
             );
         }
     }
+    
 }
 
 export const List = observer(() => {
