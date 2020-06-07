@@ -1,0 +1,17 @@
+@import url('https://fonts.googleapis.com/css?family=Permanent+Marker|Righteous&display=swap');
+
+/* Base Application Styles */
+* {
+    font-family: 'Righteous', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-size:22px;
+}
+
+body{
+  display:flex;
+  justify-content: center;
+  background: url('/style/img/bg-geo.jpg');
+  background-repeat: repeat;
+}
