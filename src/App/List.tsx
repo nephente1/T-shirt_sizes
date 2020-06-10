@@ -6,18 +6,26 @@ import {Errors} from './Errors';
 import {Description, InputsContainer, AddButton,
         MainTitle, Input, ElementTitle, TableHeader} from './List.styles';
 
+interface Row {
+    itemID: number;
+    title: string;
+}
+
 class ListState {
     @observable inputTitle: string = '';
-    @observable mainItems: Array<string>;
-    @observable xlItems: Array<string>;
-    @observable xsItems: Array<string>
+    @observable mainItems: Array<Row>;
+    @observable xlItems: Array<Row>;
+    @observable xsItems: Array<Row>
     @observable errors: Array<string> = [];
     @observable komunikat: string = '';
+    @observable counter: number = 0;
+    @observable finalListArray: Array<any>;
 
     constructor() {
         this.mainItems = [];
         this.xlItems = [];
         this.xsItems = [];
+        this.finalListArray = []
     }
 
     @action handleClick = () => {
@@ -29,20 +37,34 @@ class ListState {
         if(this.inputTitle.length < 1){
             this.errors.push("Title should have at least 1 characters");
         };
+
         if(!matchRegex){
             this.errors.push("not match to regex");
         };
-        if(this.inputTitle.includes('xxl') && matchRegex){
-            this.xlItems.push(this.inputTitle);
+
+        if(this.inputTitle.includes('xxl') && matchRegex && this.xlItems.map(el => el.title).includes(this.inputTitle) === false) {
+            this.xlItems.push({
+                title: this.inputTitle,
+                itemID: this.counter++
+            });
         };
-        if(this.inputTitle.includes('xxs') && matchRegex){
-            this.xsItems.push(this.inputTitle);
+
+        if(this.inputTitle.includes('xxs') && matchRegex && this.xsItems.map(el => el.title).includes(this.inputTitle) === false) {
+            this.xsItems.push({
+                title: this.inputTitle,
+                itemID: this.counter++
+            });
         };
-        if(this.inputTitle.length <= 2 && matchRegex) {
-            this.mainItems.push(this.inputTitle);
+
+        if(this.inputTitle.length <= 2 && matchRegex && this.mainItems.map(el => el.title).includes(this.inputTitle) === false) {
+            this.mainItems.push({
+                title: this.inputTitle,
+                itemID: this.counter++
+            });
             this.inputTitle = '';
         };
-        if(this.inputTitle.length >= 1){
+
+        if(this.inputTitle.length >= 1) {
             this.inputTitle = '';
         };
         return null;
@@ -53,23 +75,36 @@ class ListState {
     }
 
     @computed get xsList() {
-        return this.xsItems.sort((a, b) => b.length - a.length);
+        return this.xsItems.sort((a, b) => b.title.length - a.title.length);
     }
 
     @computed get xlList() {
-        return this.xlItems.sort((a, b) => a.length - b.length);
+        return this.xlItems.sort((a, b) => a.title.length - b.title.length);
     }
 
     @computed get mainList() {
         const item_order = ["xs", "s", "m", "l", "xl"];
-        const orderedItems = this.mainItems.sort((a, b) => item_order.indexOf(a) - item_order.indexOf(b));
+        const orderedItems = this.mainItems.sort((a, b) => item_order.indexOf(a.title) - item_order.indexOf(b.title));
         return orderedItems;
     }
 
     @computed get finalList() {
         const finalList = [...this.xsList, ...this.mainList, ...this.xlList];
-        const finalList1 = new Set(finalList);
-        return Array.from(finalList1).map((el, i) => <RowData rowTitle={el} key={i} indexID={i}/>);
+        return finalList;
+    }
+
+    @action handleDelete = (idToDelete: number ) => {
+        const newList = this.mainItems.filter((el) => el.itemID !== idToDelete );
+        this.mainItems = newList;
+        const newListXS = this.xsItems.filter((el) => el.itemID !== idToDelete );
+        this.xsItems = newListXS;
+        const newListXL = this.xlItems.filter((el) => el.itemID !== idToDelete );
+        this.xlItems = newListXL;
+    }
+
+    @computed get renderList() {
+        const out = Array.from(this.finalList).map((el, i) => <RowData rowTitle={el.title} itemID={el.itemID} indexID={i} handleDelete={this.handleDelete}/>)
+        return out;
     }
 
     renderError() {
@@ -79,7 +114,7 @@ class ListState {
             );
         }
     }
-    
+
 }
 
 export const List = observer(() => {
@@ -101,7 +136,7 @@ export const List = observer(() => {
                 <ElementTitle>T-shirt size</ElementTitle>
                 <ElementTitle>T-shirt</ElementTitle>
             </TableHeader>
-            {state.finalList}
+            {state.renderList}
         </>
     );
 });

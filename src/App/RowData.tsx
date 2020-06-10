@@ -5,15 +5,24 @@ import {TShirtIconWrapper, ElementTitle, Rows} from './List.styles';
 interface RowDataPropsType {
     rowTitle: string;
     indexID: number;
+    itemID: number;
+    handleDelete:(id: number) => void;
 }
 
 export const RowData = observer((props: RowDataPropsType) => {
+
+    const onHandleDelete = () => {
+        const {itemID, handleDelete } = props;
+        handleDelete(itemID)
+    }
+
     return (
         <Rows>
             <ElementTitle>{props.rowTitle}</ElementTitle>
             <ElementTitle>
                 <TShirtIconWrapper size={props.indexID + 1} />
             </ElementTitle>
+            <button onClick={onHandleDelete}>Delete</button>
         </Rows>
     );
 });
