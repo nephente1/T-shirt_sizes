@@ -10,13 +10,14 @@ export const TShirtIconWrapper = styled(TShirtIcon)<TshirtIconPropsTypes>`
 
 export const Description = styled('p')`
     font-size: 16px;
-    margin: 0 0 20px;
+    margin: 0 10px 20px 10px;
 `;
 
 export const InputsContainer = styled('div')`
     display:flex;
     justify-content: center;
     flex-direction:column;
+    align-items: center;
 `;
 
 export const MainTitle = styled('h1')`
@@ -36,6 +37,20 @@ export const AddButton = styled('button')`
     border-radius: 5%;
     &:hover{
         background: #c0ee56;
+`;
+
+export const DeleteButton = styled('button')`
+    border: 0px;
+    color: white;
+    box-shadow: 0px 0px 5px 0px #797979;
+    cursor: pointer;
+    border-radius: 5%;
+    background: orangered;
+    font-size: 18px;
+    padding: 5px 15px;
+    &:hover{
+        background: red;
+    }
 `;
 
 export const Input = styled('input')`
@@ -73,4 +88,19 @@ export const Rows = styled('div')`
     align-items: center;
     padding: 5px;
     border-bottom: 1px solid silver;
+    width: 100vw;
+    overflow-x: scroll;
+    @media screen and (min-width: 768px){
+        width: 700px;
+    }
+`;
+
+export const InputContainer = styled('div')`
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    @media screen and (min-width: 768px){
+        display: block;
+    }
 `;

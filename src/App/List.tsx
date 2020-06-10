@@ -4,7 +4,7 @@ import {observer} from "mobx-react";
 import {RowData} from './RowData';
 import {Errors} from './Errors';
 import {Description, InputsContainer, AddButton,
-        MainTitle, Input, ElementTitle, TableHeader} from './List.styles';
+        MainTitle, Input, ElementTitle, TableHeader, InputContainer} from './List.styles';
 
 interface Row {
     itemID: number;
@@ -30,7 +30,7 @@ class ListState {
 
     @action handleClick = () => {
         this.errors = [];
-        const regex = /s|m|l|\x+s|\x+l/;
+        const regex = /^s$|^m$|^l$|^\x+s$|^\x+l$/;
         const matchRegex = this.inputTitle.match(regex);
 
         //validation conditions
@@ -126,10 +126,10 @@ export const List = observer(() => {
                 <MainTitle>T-shirt sizes</MainTitle>
                 <Description>you can type only t-shirt sizes like +xs, s, m, l, +xl and its will be sorted below</Description>
                 {state.renderError()}
-                <div>Type T-shirt size
+                <InputContainer>Type T-shirt size
                     <Input onChange={state.handleChangeTitle} type="text" value={state.inputTitle}/>
                     <AddButton onClick={state.handleClick}>ADD</AddButton>
-                </div>
+                </InputContainer>
             </InputsContainer>
 
             <TableHeader>

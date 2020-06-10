@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {observer} from "mobx-react";
-import {TShirtIconWrapper, ElementTitle, Rows} from './List.styles';
+import {TShirtIconWrapper, ElementTitle, Rows, DeleteButton} from './List.styles';
 
 interface RowDataPropsType {
     rowTitle: string;
@@ -22,7 +22,7 @@ export const RowData = observer((props: RowDataPropsType) => {
             <ElementTitle>
                 <TShirtIconWrapper size={props.indexID + 1} />
             </ElementTitle>
-            <button onClick={onHandleDelete}>Delete</button>
+            <DeleteButton onClick={onHandleDelete}>Delete</DeleteButton>
         </Rows>
     );
 });
